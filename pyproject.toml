@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.backends._legacy:_Backend"
+
+[project]
+name = "consulting-mcp-server"
+version = "0.1.0"
+description = "MCP server exposing RAG pipeline and Document Intelligence as composable tools"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.12"
+authors = [
+    { name = "Shawn Brinkley" },
+]
+dependencies = [
+    "mcp",
+    "pydantic",
+    "python-dotenv",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["src*"]

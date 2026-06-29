@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "consulting-mcp-server": {
+      "command": "python",
+      "args": ["src/server.py"],
+      "cwd": "/Users/shawnbrinkley/Library/CloudStorage/OneDrive-DominionDigital/projects/consulting-mcp-server",
+      "env": {
+        "RAG_PIPELINE_PATH": "/Users/shawnbrinkley/Library/CloudStorage/OneDrive-DominionDigital/projects/rag-pipeline",
+        "DOC_INTEL_PATH": "/Users/shawnbrinkley/Library/CloudStorage/OneDrive-DominionDigital/projects/doc-intelligence",
+        "ANTHROPIC_API_KEY": "sk-ant-..."
+      }
+    }
+  }
+}
