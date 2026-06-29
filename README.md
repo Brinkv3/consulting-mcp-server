@@ -127,4 +127,4 @@ pytest tests/ -v
 
 ## License
 
-[LICENSE](LICENSE). (c) 2026 Carter Brinkley Consulting LLC
+[LICENSE](LICENSE) (c) 2026 Carter Brinkley Consulting LLC
