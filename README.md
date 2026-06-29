@@ -4,6 +4,12 @@ MCP server that exposes two AI pipelines — [RAG Pipeline](https://github.com/B
 
 This is the integration layer, not the intelligence layer. The intelligence lives in the pipeline repos. This server makes it consumable through a standard protocol.
 
+## Architecture
+
+<p align="center">
+  <img src="docs/mcp-architecture.svg" alt="MCP Server Architecture" width="700" />
+</p>
+
 ## Tools
 
 ### RAG Pipeline

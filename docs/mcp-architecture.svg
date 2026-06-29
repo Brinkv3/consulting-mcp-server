@@ -1,0 +1,187 @@
+<svg viewBox="0 0 760 820" xmlns="http://www.w3.org/2000/svg" role="img">
+  <title>Consulting MCP Server Architecture</title>
+  <desc>Architecture diagram showing how an MCP client connects through the consulting MCP server to the RAG pipeline and document intelligence backends via 8 composable tools.</desc>
+
+  <style>
+    .box-navy { fill: #1e3a5f; rx: 10; ry: 10; }
+    .box-blue { fill: #0ea5e9; rx: 10; ry: 10; }
+    .box-slate { fill: #5b6b7d; rx: 10; ry: 10; }
+    .box-green { fill: #22c55e; rx: 10; ry: 10; }
+    .box-rose { fill: #b5566e; rx: 10; ry: 10; }
+    .box-white { fill: #ffffff; rx: 10; ry: 10; stroke: #1e293b; stroke-width: 1.5; }
+    .box-label { fill: #fff; font-family: system-ui, sans-serif; font-size: 14px; font-weight: 600; text-anchor: middle; dominant-baseline: central; }
+    .box-label-dark { fill: #1e293b; font-family: system-ui, sans-serif; font-size: 14px; font-weight: 600; text-anchor: middle; dominant-baseline: central; }
+    .box-sub { fill: rgba(255,255,255,0.8); font-family: system-ui, sans-serif; font-size: 10px; text-anchor: middle; dominant-baseline: central; }
+    .box-sub-dark { fill: #64748b; font-family: system-ui, sans-serif; font-size: 10px; text-anchor: middle; dominant-baseline: central; }
+    .arrow { stroke: #94a3b8; stroke-width: 2; fill: none; marker-end: url(#arrowhead); }
+    .arrow-dash { stroke: #1e293b; stroke-width: 2; fill: none; marker-end: url(#arrowhead-black); stroke-dasharray: 6 4; }
+    .phase-label { fill: #64748b; font-family: system-ui, sans-serif; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+    .section-bg { fill: #f8fafc; rx: 12; ry: 12; opacity: 0.5; }
+    .tool-box { fill: #ffffff; rx: 6; ry: 6; stroke: #cbd5e1; stroke-width: 1; }
+    .tool-label { fill: #1e293b; font-family: system-ui, sans-serif; font-size: 11px; font-weight: 600; text-anchor: middle; dominant-baseline: central; }
+    .tool-sub { fill: #64748b; font-family: system-ui, sans-serif; font-size: 9px; text-anchor: middle; dominant-baseline: central; }
+  </style>
+
+  <defs>
+    <marker id="arrowhead" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#94a3b8" />
+    </marker>
+    <marker id="arrowhead-black" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#1e293b" />
+    </marker>
+  </defs>
+
+  <!-- ===== MCP Clients ===== -->
+  <text class="phase-label" x="50" y="30">MCP Clients</text>
+
+  <rect class="box-white" x="80" y="45" width="150" height="44" />
+  <text class="box-label-dark" x="155" y="61">Claude Desktop</text>
+  <text class="box-sub-dark" x="155" y="77">GUI client</text>
+
+  <rect class="box-white" x="270" y="45" width="150" height="44" />
+  <text class="box-label-dark" x="345" y="61">Claude Code</text>
+  <text class="box-sub-dark" x="345" y="77">CLI / IDE</text>
+
+  <rect class="box-white" x="460" y="45" width="190" height="44" />
+  <text class="box-label-dark" x="555" y="61">Any MCP Client</text>
+  <text class="box-sub-dark" x="555" y="77">Standard protocol</text>
+
+  <!-- Arrows from clients to protocol bar -->
+  <line class="arrow" x1="155" y1="89" x2="155" y2="115" />
+  <line class="arrow" x1="345" y1="89" x2="345" y2="115" />
+  <line class="arrow" x1="555" y1="89" x2="555" y2="115" />
+
+  <!-- Protocol bar -->
+  <rect class="box-slate" x="80" y="115" width="570" height="34" />
+  <text class="box-label" x="365" y="132">MCP Protocol (JSON-RPC over stdio)</text>
+
+  <!-- Arrow to server -->
+  <line class="arrow" x1="365" y1="149" x2="365" y2="180" />
+
+  <!-- ===== MCP Server ===== -->
+  <rect class="section-bg" x="20" y="180" width="720" height="320" />
+  <text class="phase-label" x="50" y="205">Consulting MCP Server</text>
+
+  <!-- Server core -->
+  <rect class="box-navy" x="200" y="215" width="330" height="50" />
+  <text class="box-label" x="365" y="234">server.py</text>
+  <text class="box-sub" x="365" y="250">Tool registration · Request routing · Config</text>
+
+  <!-- Arrows to tool handler boxes -->
+  <line class="arrow" x1="280" y1="265" x2="190" y2="295" />
+  <line class="arrow" x1="450" y1="265" x2="540" y2="295" />
+
+  <!-- RAG tools handler -->
+  <rect class="box-blue" x="80" y="295" width="220" height="44" />
+  <text class="box-label" x="190" y="311">rag_tools.py</text>
+  <text class="box-sub" x="190" y="327">RAG tool handlers</text>
+
+  <!-- Doc tools handler -->
+  <rect class="box-blue" x="430" y="295" width="220" height="44" />
+  <text class="box-label" x="540" y="311">doc_tools.py</text>
+  <text class="box-sub" x="540" y="327">Doc tool handlers</text>
+
+  <!-- RAG tools grid -->
+  <rect class="tool-box" x="45" y="360" width="120" height="36" />
+  <text class="tool-label" x="105" y="374">rag_query</text>
+  <text class="tool-sub" x="105" y="388">Single-pass RAG</text>
+
+  <rect class="tool-box" x="180" y="360" width="120" height="36" />
+  <text class="tool-label" x="240" y="374">rag_agent_query</text>
+  <text class="tool-sub" x="240" y="388">Multi-agent</text>
+
+  <rect class="tool-box" x="115" y="410" width="120" height="36" />
+  <text class="tool-label" x="175" y="424">rag_index</text>
+  <text class="tool-sub" x="175" y="438">Re-index corpus</text>
+
+  <!-- Doc tools grid -->
+  <rect class="tool-box" x="400" y="360" width="120" height="36" />
+  <text class="tool-label" x="460" y="374">doc_classify</text>
+  <text class="tool-sub" x="460" y="388">Type detection</text>
+
+  <rect class="tool-box" x="535" y="360" width="120" height="36" />
+  <text class="tool-label" x="595" y="374">doc_extract</text>
+  <text class="tool-sub" x="595" y="388">Full pipeline</text>
+
+  <rect class="tool-box" x="400" y="410" width="120" height="36" />
+  <text class="tool-label" x="460" y="424">doc_assess</text>
+  <text class="tool-sub" x="460" y="438">Multi-doc analysis</text>
+
+  <rect class="tool-box" x="535" y="410" width="120" height="36" />
+  <text class="tool-label" x="595" y="424">doc_types</text>
+  <text class="tool-sub" x="595" y="438">List schemas</text>
+
+  <!-- Health tool (centered) -->
+  <rect class="tool-box" x="300" y="460" width="120" height="36" />
+  <text class="tool-label" x="360" y="474">health</text>
+  <text class="tool-sub" x="360" y="488">Status check</text>
+
+  <!-- Arrows from tool handlers to tool grids -->
+  <line class="arrow-dash" x1="140" y1="339" x2="105" y2="360" />
+  <line class="arrow-dash" x1="230" y1="339" x2="240" y2="360" />
+  <line class="arrow-dash" x1="490" y1="339" x2="460" y2="360" />
+  <line class="arrow-dash" x1="590" y1="339" x2="595" y2="360" />
+
+  <!-- ===== Connection to backends ===== -->
+  <text class="phase-label" x="50" y="535">Path-Based Import</text>
+
+  <rect class="box-slate" x="80" y="545" width="260" height="34" />
+  <text class="box-label" x="210" y="562">sys.path → RAG_PIPELINE_PATH</text>
+
+  <rect class="box-slate" x="400" y="545" width="260" height="34" />
+  <text class="box-label" x="530" y="562">sys.path → DOC_INTEL_PATH</text>
+
+  <!-- Arrows from tools to import bars -->
+  <line class="arrow" x1="175" y1="446" x2="210" y2="545" />
+  <line class="arrow" x1="460" y1="446" x2="530" y2="545" />
+
+  <!-- Arrows to backends -->
+  <line class="arrow" x1="210" y1="579" x2="210" y2="620" />
+  <line class="arrow" x1="530" y1="579" x2="530" y2="620" />
+
+  <!-- ===== Backend Repos ===== -->
+  <rect class="section-bg" x="20" y="620" width="340" height="175" />
+  <text class="phase-label" x="50" y="645">RAG Pipeline Repo</text>
+
+  <rect class="box-green" x="55" y="660" width="130" height="36" />
+  <text class="box-label" x="120" y="672">Retriever</text>
+  <text class="box-sub" x="120" y="688">ChromaDB + MiniLM</text>
+
+  <rect class="box-green" x="200" y="660" width="130" height="36" />
+  <text class="box-label" x="265" y="672">Generator</text>
+  <text class="box-sub" x="265" y="688">Claude + grounding</text>
+
+  <rect class="box-green" x="55" y="710" width="130" height="36" />
+  <text class="box-label" x="120" y="722">Agent</text>
+  <text class="box-sub" x="120" y="738">Multi-query coord.</text>
+
+  <rect class="box-green" x="200" y="710" width="130" height="36" />
+  <text class="box-label" x="265" y="722">Guardrails</text>
+  <text class="box-sub" x="265" y="738">Input/output checks</text>
+
+  <rect class="box-white" x="100" y="758" width="180" height="28" />
+  <text class="box-sub-dark" x="190" y="772">201 chunks · 5 source docs</text>
+
+  <rect class="section-bg" x="400" y="620" width="340" height="175" />
+  <text class="phase-label" x="430" y="645">Doc Intelligence Repo</text>
+
+  <rect class="box-rose" x="430" y="660" width="130" height="36" />
+  <text class="box-label" x="495" y="672">Classifier</text>
+  <text class="box-sub" x="495" y="688">Claude + reasoning</text>
+
+  <rect class="box-rose" x="575" y="660" width="130" height="36" />
+  <text class="box-label" x="640" y="672">Extractor</text>
+  <text class="box-sub" x="640" y="688">Schema-driven</text>
+
+  <rect class="box-rose" x="430" y="710" width="130" height="36" />
+  <text class="box-label" x="495" y="722">Validator</text>
+  <text class="box-sub" x="495" y="738">Required + quality</text>
+
+  <rect class="box-rose" x="575" y="710" width="130" height="36" />
+  <text class="box-label" x="640" y="722">Analyzer</text>
+  <text class="box-sub" x="640" y="738">Cross-doc findings</text>
+
+  <rect class="box-white" x="475" y="758" width="180" height="28" />
+  <text class="box-sub-dark" x="565" y="772">6 schemas · auto-discovery</text>
+
+</svg>
