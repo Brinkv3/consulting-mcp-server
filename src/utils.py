@@ -54,6 +54,9 @@ def _import_rag_modules(rag_path: str | None) -> dict:
     if not rag_path or not Path(rag_path).is_dir():
         return {"_error": f"RAG pipeline path not found: {rag_path}"}
 
+    # AuditLogger creates a logs/ dir relative to CWD at import time
+    prev_cwd = os.getcwd()
+    os.chdir(rag_path)
     sys.path.insert(0, rag_path)
     try:
         from src.pipeline import (
@@ -70,6 +73,7 @@ def _import_rag_modules(rag_path: str | None) -> dict:
     except Exception as exc:
         return {"_error": f"Failed to import RAG pipeline: {exc}"}
     finally:
+        os.chdir(prev_cwd)
         if rag_path in sys.path:
             sys.path.remove(rag_path)
         _clear_src_modules()
