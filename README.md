@@ -127,4 +127,4 @@ pytest tests/ -v
 
 ## License
 
-MIT — see [LICENSE](LICENSE).
+[LICENSE](LICENSE). (c) 2026 Carter Brinkley Consulting LLC
