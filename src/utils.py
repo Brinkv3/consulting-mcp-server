@@ -21,6 +21,7 @@ def load_config() -> dict:
     _config = {
         "rag_pipeline_path": os.getenv("RAG_PIPELINE_PATH"),
         "doc_intel_path": os.getenv("DOC_INTEL_PATH"),
+        "audit_path": os.getenv("AUDIT_PATH"),
         "llm_provider": os.getenv("LLM_PROVIDER"),
         "llm_api_key": os.getenv("LLM_API_KEY"),
         "rag_chroma_dir": None,
@@ -39,16 +40,17 @@ def load_config() -> dict:
     return _config
 
 
-def setup_pipeline_imports(config: dict) -> tuple[dict, dict]:
+def setup_pipeline_imports(config: dict) -> tuple[dict, dict, dict]:
     """Import pipeline modules, handling the src namespace conflict between repos.
 
-    Both pipelines use ``src/`` as their package directory. We import one at a
-    time, capture function references, then flush ``sys.modules['src.*']`` before
-    the next import so the two packages never collide.
+    All three pipelines use ``src/`` as their package directory. We import one
+    at a time, capture function references, then flush ``sys.modules['src.*']``
+    before the next import so the packages never collide.
     """
     rag_fns = _import_rag_modules(config.get("rag_pipeline_path"))
     doc_fns = _import_doc_modules(config.get("doc_intel_path"))
-    return rag_fns, doc_fns
+    audit_fns = _import_audit_modules(config.get("audit_path"))
+    return rag_fns, doc_fns, audit_fns
 
 
 def _import_rag_modules(rag_path: str | None) -> dict:
@@ -104,6 +106,32 @@ def _import_doc_modules(doc_path: str | None) -> dict:
     finally:
         if doc_path in sys.path:
             sys.path.remove(doc_path)
+        _clear_src_modules()
+
+
+def _import_audit_modules(audit_path: str | None) -> dict:
+    if not audit_path or not Path(audit_path).is_dir():
+        return {"_error": f"Agentic audit path not found: {audit_path}"}
+
+    prev_cwd = os.getcwd()
+    os.chdir(audit_path)
+    sys.path.insert(0, audit_path)
+    try:
+        from src.orchestrator import AuditOrchestrator
+        from src.question_gen import export_framework_json
+        from src.models import AppResult
+
+        return {
+            "AuditOrchestrator": AuditOrchestrator,
+            "export_framework_json": export_framework_json,
+            "AppResult": AppResult,
+        }
+    except Exception as exc:
+        return {"_error": f"Failed to import agentic audit: {exc}"}
+    finally:
+        os.chdir(prev_cwd)
+        if audit_path in sys.path:
+            sys.path.remove(audit_path)
         _clear_src_modules()
 
 

@@ -15,6 +15,7 @@ class TestConfig:
     @patch.dict("os.environ", {
         "RAG_PIPELINE_PATH": "/tmp/fake-rag",
         "DOC_INTEL_PATH": "/tmp/fake-doc",
+        "AUDIT_PATH": "/tmp/fake-audit",
         "LLM_PROVIDER": "anthropic",
         "LLM_API_KEY": "sk-test-key",
     })
@@ -24,6 +25,7 @@ class TestConfig:
         config = load_config()
         assert config["rag_pipeline_path"] == "/tmp/fake-rag"
         assert config["doc_intel_path"] == "/tmp/fake-doc"
+        assert config["audit_path"] == "/tmp/fake-audit"
         assert config["llm_provider"] == "anthropic"
         assert config["llm_api_key"] == "sk-test-key"
         assert config["rag_chroma_dir"] == "/tmp/fake-rag/chroma"
@@ -70,29 +72,39 @@ class TestErrorResponse:
 
 class TestPipelineImports:
     def test_missing_rag_path_returns_error(self):
-        rag_fns, _ = setup_pipeline_imports({
+        rag_fns, _, _ = setup_pipeline_imports({
             "rag_pipeline_path": "/nonexistent/rag",
             "doc_intel_path": None,
         })
         assert "_error" in rag_fns
 
     def test_missing_doc_path_returns_error(self):
-        _, doc_fns = setup_pipeline_imports({
+        _, doc_fns, _ = setup_pipeline_imports({
             "rag_pipeline_path": None,
             "doc_intel_path": "/nonexistent/doc",
         })
         assert "_error" in doc_fns
 
+    def test_missing_audit_path_returns_error(self):
+        _, _, audit_fns = setup_pipeline_imports({
+            "rag_pipeline_path": None,
+            "doc_intel_path": None,
+            "audit_path": "/nonexistent/audit",
+        })
+        assert "_error" in audit_fns
+
     def test_real_pipeline_imports(self):
         rag_path = str(Path(__file__).parent.parent.parent / "rag-pipeline")
         doc_path = str(Path(__file__).parent.parent.parent / "doc-intelligence")
+        audit_path = str(Path(__file__).parent.parent.parent / "agentic-audit")
 
         if not Path(rag_path).is_dir() or not Path(doc_path).is_dir():
             pytest.skip("Pipeline repos not found at expected paths")
 
-        rag_fns, doc_fns = setup_pipeline_imports({
+        rag_fns, doc_fns, audit_fns = setup_pipeline_imports({
             "rag_pipeline_path": rag_path,
             "doc_intel_path": doc_path,
+            "audit_path": audit_path,
         })
 
         assert "_error" not in rag_fns, rag_fns.get("_error")
@@ -106,3 +118,8 @@ class TestPipelineImports:
         assert "classify_document" in doc_fns
         assert "get_available_types" in doc_fns
         assert "parse_file" in doc_fns
+
+        if Path(audit_path).is_dir():
+            assert "_error" not in audit_fns, audit_fns.get("_error")
+            assert "AuditOrchestrator" in audit_fns
+            assert "AppResult" in audit_fns

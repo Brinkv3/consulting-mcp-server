@@ -12,22 +12,25 @@ from mcp.server.fastmcp import FastMCP
 from utils import error_response, load_config, setup_pipeline_imports
 from rag_tools import register_rag_tools
 from doc_tools import register_doc_tools
+from audit_tools import register_audit_tools
 
 mcp = FastMCP(
     "consulting-mcp-server",
     instructions=(
-        "AI-powered document analysis and knowledge base tools. "
+        "AI-powered document analysis, knowledge base, and audit tools. "
         "Use rag_* tools to search and ask questions across an indexed corpus. "
         "Use doc_* tools to classify, extract fields from, and compare documents. "
+        "Use audit_* tools to generate questions, process interviews, and synthesize audit deliverables. "
         "Call health first to verify the server is properly configured."
     ),
 )
 
 config = load_config()
-rag_fns, doc_fns = setup_pipeline_imports(config)
+rag_fns, doc_fns, audit_fns = setup_pipeline_imports(config)
 
 register_rag_tools(mcp, rag_fns, config)
 register_doc_tools(mcp, doc_fns, config)
+register_audit_tools(mcp, audit_fns, config)
 
 
 @mcp.tool()
@@ -41,6 +44,7 @@ def health() -> dict:
         "server": "running",
         "rag_pipeline": "unavailable" if "_error" in rag_fns else "available",
         "doc_intelligence": "unavailable" if "_error" in doc_fns else "available",
+        "agentic_audit": "unavailable" if "_error" in audit_fns else "available",
         "llm_provider": config.get("llm_provider") or "not configured",
         "llm_api_key": "set" if config.get("llm_api_key") else "missing",
     }
@@ -66,6 +70,8 @@ def health() -> dict:
         status["rag_error"] = rag_fns["_error"]
     if "_error" in doc_fns:
         status["doc_error"] = doc_fns["_error"]
+    if "_error" in audit_fns:
+        status["audit_error"] = audit_fns["_error"]
 
     return status
 
