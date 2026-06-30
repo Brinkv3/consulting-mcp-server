@@ -39,7 +39,7 @@ This is the integration layer, not the intelligence layer. The intelligence live
 - Both pipeline repos cloned locally:
   - [rag-pipeline](https://github.com/Brinkv3/rag-pipeline)
   - [doc-intelligence](https://github.com/Brinkv3/doc-intelligence)
-- `ANTHROPIC_API_KEY` set in environment or `.env`
+- LLM provider config (`LLM_PROVIDER`, `LLM_MODEL`, `LLM_API_KEY`) set in environment or `.env`
 
 ### Setup
 
@@ -52,8 +52,9 @@ source .venv/bin/activate
 
 # Install server + pipeline dependencies
 pip install -r requirements.txt
-pip install anthropic chromadb sentence-transformers PyMuPDF python-docx \
-            python-pptx openpyxl pandas tiktoken
+pip install "llm-adapter[anthropic] @ git+https://github.com/Brinkv3/llm-adapter.git" \
+    chromadb sentence-transformers PyMuPDF python-docx \
+    python-pptx openpyxl pandas tiktoken
 
 # Configure pipeline paths
 cp .env.example .env
@@ -74,7 +75,9 @@ Copy the config into your Claude Desktop settings (`~/Library/Application Suppor
       "env": {
         "RAG_PIPELINE_PATH": "/path/to/rag-pipeline",
         "DOC_INTEL_PATH": "/path/to/doc-intelligence",
-        "ANTHROPIC_API_KEY": "sk-ant-..."
+        "LLM_PROVIDER": "anthropic",
+        "LLM_MODEL": "claude-sonnet-4-6",
+        "LLM_API_KEY": "your-key-here"
       }
     }
   }
@@ -100,7 +103,8 @@ Once connected, ask Claude to run `health` — it reports the status of each com
 Server: running
 RAG pipeline: available
 Doc intelligence: available
-API key: set
+LLM provider: anthropic
+LLM API key: set
 Vector store: found
 Schemas: found (6 types)
 ```

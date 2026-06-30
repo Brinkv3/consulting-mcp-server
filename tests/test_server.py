@@ -15,7 +15,8 @@ class TestConfig:
     @patch.dict("os.environ", {
         "RAG_PIPELINE_PATH": "/tmp/fake-rag",
         "DOC_INTEL_PATH": "/tmp/fake-doc",
-        "ANTHROPIC_API_KEY": "sk-test-key",
+        "LLM_PROVIDER": "anthropic",
+        "LLM_API_KEY": "sk-test-key",
     })
     def test_load_config_reads_env(self):
         import utils
@@ -23,7 +24,8 @@ class TestConfig:
         config = load_config()
         assert config["rag_pipeline_path"] == "/tmp/fake-rag"
         assert config["doc_intel_path"] == "/tmp/fake-doc"
-        assert config["anthropic_api_key"] == "sk-test-key"
+        assert config["llm_provider"] == "anthropic"
+        assert config["llm_api_key"] == "sk-test-key"
         assert config["rag_chroma_dir"] == "/tmp/fake-rag/chroma"
         assert config["doc_schemas_dir"] == "/tmp/fake-doc/schemas"
         utils._config = None
@@ -35,7 +37,8 @@ class TestConfig:
         utils._config = None
         config = load_config()
         assert config["rag_pipeline_path"] is None
-        assert config["anthropic_api_key"] is None
+        assert config["llm_provider"] is None
+        assert config["llm_api_key"] is None
         utils._config = None
 
 

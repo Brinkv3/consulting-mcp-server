@@ -41,7 +41,8 @@ def health() -> dict:
         "server": "running",
         "rag_pipeline": "unavailable" if "_error" in rag_fns else "available",
         "doc_intelligence": "unavailable" if "_error" in doc_fns else "available",
-        "anthropic_api_key": "set" if config.get("anthropic_api_key") else "missing",
+        "llm_provider": config.get("llm_provider") or "not configured",
+        "llm_api_key": "set" if config.get("llm_api_key") else "missing",
     }
 
     chroma_dir = config.get("rag_chroma_dir")

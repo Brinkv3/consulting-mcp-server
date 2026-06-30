@@ -21,7 +21,8 @@ def load_config() -> dict:
     _config = {
         "rag_pipeline_path": os.getenv("RAG_PIPELINE_PATH"),
         "doc_intel_path": os.getenv("DOC_INTEL_PATH"),
-        "anthropic_api_key": os.getenv("ANTHROPIC_API_KEY"),
+        "llm_provider": os.getenv("LLM_PROVIDER"),
+        "llm_api_key": os.getenv("LLM_API_KEY"),
         "rag_chroma_dir": None,
         "doc_schemas_dir": None,
     }

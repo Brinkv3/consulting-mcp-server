@@ -149,7 +149,7 @@
 
   <rect class="box-green" x="200" y="660" width="130" height="36" />
   <text class="box-label" x="265" y="672">Generator</text>
-  <text class="box-sub" x="265" y="688">Claude + grounding</text>
+  <text class="box-sub" x="265" y="688">LLM + grounding</text>
 
   <rect class="box-green" x="55" y="710" width="130" height="36" />
   <text class="box-label" x="120" y="722">Agent</text>
@@ -167,7 +167,7 @@
 
   <rect class="box-rose" x="430" y="660" width="130" height="36" />
   <text class="box-label" x="495" y="672">Classifier</text>
-  <text class="box-sub" x="495" y="688">Claude + reasoning</text>
+  <text class="box-sub" x="495" y="688">LLM + reasoning</text>
 
   <rect class="box-rose" x="575" y="660" width="130" height="36" />
   <text class="box-label" x="640" y="672">Extractor</text>

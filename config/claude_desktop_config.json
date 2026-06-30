@@ -7,7 +7,9 @@
       "env": {
         "RAG_PIPELINE_PATH": "/Users/shawnbrinkley/Library/CloudStorage/OneDrive-DominionDigital/projects/rag-pipeline",
         "DOC_INTEL_PATH": "/Users/shawnbrinkley/Library/CloudStorage/OneDrive-DominionDigital/projects/doc-intelligence",
-        "ANTHROPIC_API_KEY": "sk-ant-..."
+        "LLM_PROVIDER": "anthropic",
+        "LLM_MODEL": "claude-sonnet-4-6",
+        "LLM_API_KEY": "your-key-here"
       }
     }
   }
